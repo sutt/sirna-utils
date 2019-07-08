@@ -5,6 +5,8 @@ import cv2
 import matplotlib.pyplot as plt
 from matplotlib.cm import get_cmap
 
+# testing ftp
+
 def plot_two_imgs_by_channel(l_l_imgs,
                              b_crop=True,
                              crop_dims=(40,100,40,100),
