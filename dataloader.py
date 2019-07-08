@@ -205,7 +205,7 @@ class DataLoader:
         return list_list_imgs
 
     def load_img_from_idc(self, idc):
-        pass
+        return 'testing ftp'
     
     def get_all_sirna_df(self, sirna=None):
         '''return the train rows with a certain sirna'''
