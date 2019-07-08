@@ -206,6 +206,9 @@ class DataLoader:
 
     def load_img_from_idc(self, idc):
         print('testing2 ftp')
+
+    def hello_world(self):
+        print('ftp works')
     
     def get_all_sirna_df(self, sirna=None):
         '''return the train rows with a certain sirna'''
