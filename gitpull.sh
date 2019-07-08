@@ -1,2 +1,2 @@
-git --git-dir=/home/jupyter//sirna/utils/.git pull
-git --git-dir=/home/jupyter/sirna/utils/.git reset --hard origin/master
+git -C /home/jupyter//sirna/utils/ pull
+git -C /home/jupyter/sirna/utils/ reset --hard origin/master
