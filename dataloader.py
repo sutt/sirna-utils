@@ -194,7 +194,7 @@ class DataLoader:
 
     
     def load_img_from_idcs(self, idcs):
-        l_imgs = [self.load_img(cls.idc_to_fn(idc)) for idc in idcs]
+        l_imgs = [self.load_img(self.idc_to_fn(idc)) for idc in idcs]
 
     
     def load_img_from_l_idc(self, l_idcs):
@@ -257,7 +257,7 @@ class DataLoader:
         ''' returns of l_l_imgs - all the neg controls for a particular exp+plate'''
         df = self.get_neg_controls_df(experiment, plate)
         idas = [self.train_id_to_ida(e) for e in df['id_code'].tolist()]
-        l_idcs = [self.ida_to_idcs(e) for e in idas]
+        l_idcs = [self.ida_to_idcs(e) for e in idas][0]
         print(l_idcs)
 
         l_l_imgs = self.load_img_from_l_idc(l_idcs)
