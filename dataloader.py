@@ -104,7 +104,6 @@ class DataLoader:
             return as ida
         '''
         ida = {}
-        print(train_id)
         for k,v in zip(
                  ('experiment', 'plate', 'well'),
                  train_id.split('_')
