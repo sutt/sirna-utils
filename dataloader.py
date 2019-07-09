@@ -195,11 +195,11 @@ class DataLoader:
 
     @classmethod
     def load_img_from_idc(cls, idc):
-        l_imgs = [self.load_img(cls.idc_to_fn(idc)) for idc in idcs]
+        l_imgs = [cls.load_img(cls.idc_to_fn(idc)) for idc in idcs]
 
     @classmethod
     def load_img_from_l_idc(cls, l_idcs):
-        l_l_imgs = [[self.load_img_from_idc(**idc) for idc in idcs]
+        l_l_imgs = [[cls.load_img_from_idc(**idc) for idc in idcs]
                             for idcs in l_idcs
                         ]
         return l_l_imgs
