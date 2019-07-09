@@ -258,6 +258,7 @@ class DataLoader:
         df = self.get_controls_df(experiment, plate)
         idas = [self.train_id_to_ida(e) for e in df['id_code'].tolist()]
         l_idcs = [self.ida_to_idcs(e) for e in idas]
+        print(l_idcs)
 
         l_l_imgs = self.load_img_from_l_idc(l_idcs)
         return l_l_imgs
