@@ -188,9 +188,8 @@ class DataLoader:
             img = cv2.resize(img, (npix, npix))
         return img
 
-    @classmethod
-    def load_img_from_idc(cls, idc):
-        img = cls.load_img(cls.idc_to_fn(**idc))
+    def load_img_from_idc(self, idc):
+        img = cls.load_img(self.idc_to_fn(**idc))
         return img
 
     @classmethod
