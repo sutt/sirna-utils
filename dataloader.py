@@ -236,9 +236,10 @@ class DataLoader:
     def get_controls_df(self, experiment, plate, well=None, site=None, channel=None):
         ''' returns df - of all the controls for a particular exp+plate'''
         return (self.train_control[
-                        (self.test_control['experiment'] == experiment).mul(
+                        (self.train_control['experiment'] == experiment).mul(
                         (self.train_control['plate'] == plate))
                         ])
+                        
 
     def get_neg_controls_df(self, experiment, plate, well=None, site=None, channel=None):
         ''' returns df - of all the neg controls for a particular exp+plate'''
