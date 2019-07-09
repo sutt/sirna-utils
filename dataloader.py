@@ -6,9 +6,17 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import cv2
-import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.cm import get_cmap
+
+if os.environ.get('USER', 'na') == 'jupyter':
+    #gcp
+    CSV_DATA_DIR = 'data/csvdata/'
+    IMG_DATA_DIR = 'data/'
+else:
+    #local
+    CSV_DATA_DIR = 'data_raw/'
+    IMG_DATA_DIR = 'sample_imgs/'
 
 
 class DataLoader:
@@ -30,12 +38,24 @@ class DataLoader:
             idc - exp, plate, well, site(2), channel(6)
             
             (indexes for site and channel start at 1)
+
+        Other terminology:
+        
+            row -       index of train or train + train_controls
+            l_imgs -    list of imgs (for 6 channels)
+            l_l_imgs -  list of list of imgs 
+                        (for multiple sites, and all channels within)
+
+        Method naming:
+
+            <method>_df   returns a dataframe
+            <method>_img  returns a img (numpy array)
             
     '''
     
     def __init__(self, 
-                 csv_data_dir = 'data/csvdata/',
-                 img_data_dir = 'data/',
+                 csv_data_dir = CSV_DATA_DIR,
+                 img_data_dir = IMG_DATA_DIR,
                  prepend_msg=False,
                  ):
         
@@ -62,6 +82,8 @@ class DataLoader:
     def random(x, k=1):
         return np.random.choice(x,k=k)
     
+    # utility methods ---------
+
     def row_to_ida(self,row):
         '''return dict with exp, plate, wellwith 
            input (int) row in train 
@@ -165,16 +187,31 @@ class DataLoader:
         if npix != 512:
             img = cv2.resize(img, (npix, npix))
         return img
-    
+
     @classmethod
-    def load_imgs(cls, fns, npix=512):
-        '''return list of img-objs from list of fns (via cv2)'''
-        return [cls.load_img(fn, npix=npix) for fn in fns]
-        
+    def load_img_from_idc(cls, idc):
+        img = self.load_img(cls.idc_to_fn(idc))
+        return img
+
+    @classmethod
+    def load_img_from_idc(cls, idc):
+        l_imgs = [self.load_img(cls.idc_to_fn(idc)) for idc in idcs]
+
+    @classmethod
+    def load_img_from_l_idc(cls, l_idcs):
+        l_l_imgs = [[self.load_img_from_idc(**idc) for idc in idcs]
+                            for idcs in l_idcs
+                        ]
+        return l_l_imgs
+
+    # analytic methods -------------
     
-    def get_two_sites(self, sirna=None, experiment=None):
+    def get_two_sites_idc(self, sirna=None, experiment=None):
         '''return the two sites with the same:
             experiment, well, (sirna / well)
+            TODO
+            [ ] better code for indexing train
+            [ ] allow well to be an argument
         '''
         
         try:
@@ -192,30 +229,50 @@ class DataLoader:
         
         ida = self.row_to_ida(row)
         
-        args = self.ida_to_idcs(ida)
-        
-        list_list_imgs = [self.load_imgs(
-                              [self.idc_to_fn(**e) for e in arg]
-                                        ) 
-                          for arg in args]
-        
-        if self.prepend_msg:
-            return (args, list_list_imgs)
-        
-        return list_list_imgs
+        l_idcs = self.ida_to_idcs(ida)
 
-    def load_img_from_idc(self, idc):
-        print('testing2 ftp')
+        return l_idcs
 
-    def hello_world(self):
-        print('1216')
-    
-    def get_all_sirna_df(self, sirna=None):
+
+    def get_controls_df(self, experiment, plate, well=None, site=None, channel=None):
+        ''' returns df - of all the controls for a particular exp+plate'''
+        return (self.train_control[
+                        (self.test_control['experiment'] == experiment).mul(
+                        (self.train_control['plate'] == plate))
+                        ])
+
+    def get_neg_controls_df(self, experiment, plate, well=None, site=None, channel=None):
+        ''' returns df - of all the neg controls for a particular exp+plate'''
+        controls_df = self.get_controls_df(experiment, plate)
+        neg_df = controls_df[controls_df['well_type'] == 'negative_control']
+        return neg_df
+
+    def get_pos_controls_df(self, experiment, plate, well=None, site=None, channel=None):
+        ''' returns of df - all the neg controls for a particular exp+plate'''
+        controls_df = self.get_controls_df(experiment, plate)
+        pos_df = controls_df[controls_df['well_type'] == 'positive_control']
+        return pos_df
+
+    def get_neg_controls_img(self, experiment, plate, **kwargs):
+        ''' returns of l_l_imgs - all the neg controls for a particular exp+plate'''
+        df = self.get_controls_df(experiment, plate)
+        idas = [self.train_id_to_ida(e) for e in df['id_code']]
+        l_idcs = [self.ida_to_idcs(e) for e in idas]
+
+        l_l_imgs = self.load_img_from_l_idc(l_idcs)
+        return l_l_imgs
+
+    def get_all_sirna_df(self, sirna):
         '''return the train rows with a certain sirna'''
-        if sirna is None: 
-            pass
-        return self.train[self.train['sirna'] == sirna]
+        return self.train[ (self.train['sirna'] == sirna)]
     
-    def get_negative_control(self,x):
-        pass
         
+def test_basic():
+
+    try:
+        dc = DataLoader()
+    except:
+        raise 
+
+def test_method_1():
+    assert True
