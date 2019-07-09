@@ -194,7 +194,7 @@ class DataLoader:
         return img
 
     @classmethod
-    def load_img_from_idc(cls, idc):
+    def load_img_from_idcs(cls, idcs):
         l_imgs = [cls.load_img(cls.idc_to_fn(idc)) for idc in idcs]
 
     @classmethod
