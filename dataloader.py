@@ -190,7 +190,7 @@ class DataLoader:
 
     @classmethod
     def load_img_from_idc(cls, idc):
-        img = cls.load_img(cls.idc_to_fn(idc))
+        img = cls.load_img(cls.idc_to_fn(**idc))
         return img
 
     @classmethod
