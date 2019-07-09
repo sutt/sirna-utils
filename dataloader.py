@@ -256,6 +256,8 @@ class DataLoader:
     def get_neg_controls_img(self, experiment, plate, **kwargs):
         ''' returns of l_l_imgs - all the neg controls for a particular exp+plate'''
         df = self.get_controls_df(experiment, plate)
+        assert instance(list(df['id_code'])[0], str)
+        print(df['id_code'])
         idas = [self.train_id_to_ida(e) for e in list(df['id_code'])]
         l_idcs = [self.ida_to_idcs(e) for e in idas]
 
