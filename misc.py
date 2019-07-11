@@ -8,8 +8,17 @@ from matplotlib.cm import get_cmap
 from .imgplots import plot_two_imgs_by_channel
 from .dataloader import DataLoader
 
-# PROBLEM - dataloader needs to be instatiated, does this work?
+
+
+'''
+This modules holds functions which query the data in useful ways for
+comparisons - comparing the same phenotype/sirna/control-type across
+different factors: dif experiment, dif plate, dif site.
+
+'''
+
 dc = DataLoader()
+
 
 def negcontrol_dif_sites(experiment=None, plate=None, b_ret=False):
     ''' return - list len-2, each inner list contains 6

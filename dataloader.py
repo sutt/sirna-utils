@@ -9,6 +9,8 @@ import cv2
 import matplotlib.pyplot as plt
 from matplotlib.cm import get_cmap
 
+
+
 if os.environ.get('USER', 'na') == 'jupyter':
     #gcp
     CSV_DATA_DIR = 'data/csvdata/'
@@ -178,6 +180,12 @@ class DataLoader:
                     + '.png'
                  )
         )
+
+    def idcs_to_fns(self, idcs):
+        ''' return - list of file paths
+            input  - list of idc's (for each channel)
+        '''
+        return [self.idc_to_fn(idc) for idc in idcs]
         
     @staticmethod
     def load_img(fn, npix=512):
