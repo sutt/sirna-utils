@@ -15,16 +15,16 @@ from libs.rxrx1_utils.rxrx.io import (
                                 ,convert_tensor_to_rgb
                                 )
 
+'''
+    Wrapper on rxrx-utils functions
+'''
+
 # load as list of fn
 def img_fns_to_rgb(list_fns):
     ''' return - rgb img (512,512,3) ndarray
         input  - input list of path_fns to the img's channels
     '''
     t_imgs = load_images_as_tensor(list_fns)
-
-    rgb_t_img = convert_tensor_to_rgb(t_imgs, 
-                                    #    channels, 
-                                    #    rgb_map=rgb_map
-                                       )
+    rgb_t_img = convert_tensor_to_rgb(t_imgs, )
     return rgb_t_img
 
